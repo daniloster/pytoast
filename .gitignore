@@ -1,0 +1,8 @@
+**/.venv
+**/.vscode
+**/.coverage
+**/.coverage_html
+**/dist
+**/pytoast.egg-info
+**/Pipfile
+**/Pipfile.lock
