@@ -2,6 +2,20 @@
 
 A simple BDD (Behaviour-Driven Development) framework to run tests by CLI. The motivation came from some problems trying to make other test frameworks integrated in a simple way.
 
+## Installing
+
+> requirements.txt
+
+```
+pytoast
+```
+
+> pip
+
+```sh
+pip install pytoast
+```
+
 ## Usage
 
 To use this module for testing is pretty simple. First you need to create you entrypoint python file which can be named as you wish. For instance, lets call it `run_tests.py`.
