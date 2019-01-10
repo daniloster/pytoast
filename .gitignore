@@ -3,6 +3,7 @@
 **/.coverage
 **/.coverage_html
 **/dist
+**/build
 **/pytoast.egg-info
 **/Pipfile
 **/Pipfile.lock

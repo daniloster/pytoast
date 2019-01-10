@@ -4,3 +4,4 @@ mock==2.0.0
 psycopg2
 setuptools
 termcolor==1.1.0
+wheel==0.32.3
