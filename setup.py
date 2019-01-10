@@ -10,9 +10,9 @@ with open(README_PATH, 'r') as file:
 
 setup(
     name='pytoast',
-    version='0.0.4',
+    version='0.0.5',
     description='A BDD test framework',
-    long_description=README,
+    long_description='file: README.md',
     long_description_content_type='text/markdown',
     license='MIT',
     packages=['pytoast', 'pytoast.decorators', 'pytoast.settings'],
