@@ -1,16 +1,30 @@
 # pytoast
 
-A simple BDD (Behaviour-Driven Development) framework to run tests by CLI. The motivation came from some problems trying to make other test frameworks integrated in a simple way.
+A simple BDD (Behaviour-Driven Development) framework to run tests by CLI. The motivation came from some problems trying to make other test frameworks work in a simple way for different environment configurations.
+
+#### `Version@0.0.6`
+
+#### `Python >= 3.3.x`
+
+There were a few issues to support `python@2.7.x`, then, it has been drop.
 
 ## Installing
 
-> requirements.txt
+### By requirements.txt
+
+You may get the latest version by setting this inside the requirements file
 
 ```
 pytoast
 ```
 
-> pip
+Or specific version
+
+```
+pytoast==0.0.6
+```
+
+### By pip
 
 ```sh
 pip install pytoast
@@ -63,11 +77,13 @@ if __name__ == '__main__':
 
 To get more info, try executing: `python run_tests.py --help`
 This will provide you a list of arguments that can/should be set. The mandatory arguments are root and features.
-`--root` The root folder path to your project
-`--features` The folder path to your ".feature" files
-`--tags` will filter the scenarios that will get executed
-`--fail-fast` Define whether the process should abort when a scenario fail
-`--verbose` Define whether display stacktrace for errors
+| Argument | Description |
+| ---------------- | ------------- |
+| `--root` | The root folder path to your project |
+| `--features` | The folder path to your ".feature" files |
+| `--tags` | It will filter the scenarios that will get executed |
+| `--fail-fast` | Define whether the process should abort when a scenario fail |
+| `--verbose` | Define whether display stacktrace for errors |
 
 ### Feature files
 
