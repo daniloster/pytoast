@@ -8,14 +8,14 @@ before_install:
 install:
   - "./bin/prepare.sh"
 script:
-  - echo "Running tests against $(pipenv run python --version) ..."
+  - echo "[ci] running tests against $(pipenv run python --version) ..."
   - "./bin/run.sh"
 jobs:
   include:
-    - stage: release
+    - stage: deploy
       python: 3.6
       script:
-        - echo "Deploying to pypi ..."
+        - echo "[ci] deploying to pypi..."
         - "./bin/release.sh"
 branches:
   only:
@@ -29,6 +29,9 @@ deploy:
   skip_cleanup: true
   on:
     branch: master
+after_deploy:
+  - "./bin/after_release.sh"
+
 env:
   global:
     secure: dW9P63NQjWGdhfBsnzGXSC24zn16Vp3bI1JHezZ3ylD1ngixh14ikORdEt9WvJaol4n55C7FidS3yGCUDrdKyxZil+Rqdt1qtOJ5cpKwiqIPfPs1GdlelS/zD2NEqAM/AAxfiKWbAbqNMme+f/0H/HV7lYlbRIH0Uj/GUCvUu7hk8Fand2JeetCBhMs9pcNkmAEMrvMLdFloABtbDYqubmHB2Q+j8KiiYDVX8GE+HRhRnQCcIkZa82/QvDDcWLDdDbor+xw2sUmqJzabwVEyj+61Qp7coWnvT3Yt9dqvHznyPnVPrxUn1w0ZiO/2PuE1Z98kpKVADkNBqfg5jOq7qG+V9/pf/DCB7nq6zmFZJs8nQRap9ePnETChLuXcYuKLbSUCrDDvT/0hVMBD7dPcWN3oLuiHw6JmazxHuojq6ZX+J1aVuOsrbqg0+7H3kizsmAUQSJhY+eOKz6R0G8Flfkr6M3+4j19yZlbF+nzBGjgP20wdRXlIMDcemS54kLuYE77p+yFn3RPH9IrVmWXXyh2pahWcl+VFMM2Yt6MjMc9bXpFSBin3hfKTP0j0VuUgo8TnMh2cL8+p3cCpAXTIrKrb5MArYARB8v0++EKKS13JPiC0rzQh7uRy37wT3SDnZ95CyUQ48uEe2xPc2JoDLK8qogI+rYgXlXen2NokygI=
