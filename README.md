@@ -2,7 +2,7 @@
 
 A simple BDD (Behaviour-Driven Development) framework to run tests by CLI. The motivation came from some problems trying to make other test frameworks work in a simple way for different environment configurations.
 
-#### `Version@0.0.6`
+Version: [pytoast](https://pypi.org/project/pytoast/)
 
 #### `Python >= 3.3.x`
 
@@ -21,7 +21,7 @@ pytoast
 Or specific version
 
 ```
-pytoast==0.0.6
+pytoast==version_number
 ```
 
 ### By pip
