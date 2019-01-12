@@ -1,31 +1,26 @@
 sudo: true
 language: python
 python:
-- '3.6'
+  - "3.6"
 before_install:
-- chmod +x ./bin/*.sh
-- pip install pipenv
+  - chmod +x ./bin/*.sh
+  - pip install pipenv
 install:
-- "./bin/prepare.sh"
+  - "./bin/prepare.sh"
 script:
-- echo "[ci] running tests against $(pipenv run python --version) ..."
-- "./bin/run.sh"
+  - echo "[ci] running tests against $(pipenv run python --version) ..."
+  - "./bin/run.sh"
 jobs:
   include:
-  - stage: deploy
-    python: 3.6
-    script:
-    - echo "[ci] deploying to pypi..."
-    - "./bin/release.sh"
+    - stage: deploy
+      python: 3.6
+      script:
+        - echo "[ci] deploying to pypi..."
+        - "./bin/release.sh"
 branches:
   only:
-  - master
-deploy:
-  skip_existing: true
-  skip_cleanup: true
-  on:
-    branch: master
+    - master
 env:
   global:
-  - secure: Hd3vIQdZXmhwYtSgGgxY85QsxQGGo7wGYbMFodp0cq0ldcx+bsBW5jAUuHWvrJ6z3CmWyF/lpefvQwfxnr5iZ+BTMDJH5d+T7xRw3UFmOhkEJPw8lBQbqniY6HguZl/BqvMCRN0tYWC8/Uy2ry2LpvWJLH4eGnQkqyAcka7ex9r/GATlAGJ+tOObEIb47iBdSVLfaNHeCxoilvezwOq8nJshz5IxVW0B16gfHAYuWR4GBMmkSiNqG+SUiRUL1fAls2CH7AMjX0oJAR4tDSJ8PpJlDnw+7J9+qDKnF5hRcDY9oz1baGWRaimeOYnzEtxgpqBnv1ZzMBFKpaMWTs0zmrh6SQYCV9Rxy6Khyu7fwF4OmXo9MVgb9RkxY2QsOx8dUo+UgnrkkYmxQa2hzaYIxk68H6we7fos/W/kG0RaeYSgBoa67cYHUPOmiMWWwyks187YPjnd+De0gjFrxdEjjD/IqjOqajfr/H9axmL0y/0GIsxWtNvHLa2bqA4tPt2Iai7V28KI59mUArWtDDsIyTs0OdNUl8VVJmF8TWUVHV9GBhWgqoT8ggzBnmvpyFMuwXrcWsa05FYX20SlOetyRqy1IEbHCB7eM1UUTz6JiZpvR7aa3hWJ8eSPsR1R3lOWh1m9yRTVLJShfmZ53gutxOyK26Y9s7oERJB29RnjIbE=
-  - secure: OmrNBSUyK6N0uTD98scX67uH4k6biHPgzVrXmJs4NvAzLjIR47NCDnoTs/9E1xsKWV47UMO2W/Npy8DYhxHp7g4voel9kijQylYZjDoWguLualWyvKb+cjpuHWYYuW976YE4NwCVxvip5oOSyfFw60jKMaefttngWhqP5SezPJcjpmoBsK7qFDCwnw8LeajtNIgoFcQQ2ULnOOxUgxe47sLoZ4RZApJTBLlRxr0rCG6R+Nz3To5igXd9lP5oUZadKdZYr3/A1TaT3r+TrgsdV46k3KusGsPIxFELPofa2vCZGcwwbBWgqMu2VPW+7lI+xPSxpBMly/bwXB+4qCdBltQ+4hY61G5oZypEZenGzv9dDTnc2+INjTfXuIrlYm4Qpr6/wJUUucrhWDIpTvWN/LSJWWyNV+22Qs5Vb5b6z6vxPlHeImt2cNP6EwhdIqfHofBqFu46eLt9zOE+NdvKXhos77aWjBhgOLqq++sSLA0scM+RwSLzL25CExMlKGg+1NRN87SCIebwJmKKWNiNK6LZym3G4Bve74jP4Wj6KQlOnuLRvHilh3bm0FmTYSood5y7fS0BlvEU/IxWOMj2fOrozXJQqgWE/Xrdw6iWR3hUlAaQVp3XiooGu449i+xoNSIh0oQWxxRGTycdwByzOikZzjYjDnIzQag3T8piZiA=
+    - secure: Hd3vIQdZXmhwYtSgGgxY85QsxQGGo7wGYbMFodp0cq0ldcx+bsBW5jAUuHWvrJ6z3CmWyF/lpefvQwfxnr5iZ+BTMDJH5d+T7xRw3UFmOhkEJPw8lBQbqniY6HguZl/BqvMCRN0tYWC8/Uy2ry2LpvWJLH4eGnQkqyAcka7ex9r/GATlAGJ+tOObEIb47iBdSVLfaNHeCxoilvezwOq8nJshz5IxVW0B16gfHAYuWR4GBMmkSiNqG+SUiRUL1fAls2CH7AMjX0oJAR4tDSJ8PpJlDnw+7J9+qDKnF5hRcDY9oz1baGWRaimeOYnzEtxgpqBnv1ZzMBFKpaMWTs0zmrh6SQYCV9Rxy6Khyu7fwF4OmXo9MVgb9RkxY2QsOx8dUo+UgnrkkYmxQa2hzaYIxk68H6we7fos/W/kG0RaeYSgBoa67cYHUPOmiMWWwyks187YPjnd+De0gjFrxdEjjD/IqjOqajfr/H9axmL0y/0GIsxWtNvHLa2bqA4tPt2Iai7V28KI59mUArWtDDsIyTs0OdNUl8VVJmF8TWUVHV9GBhWgqoT8ggzBnmvpyFMuwXrcWsa05FYX20SlOetyRqy1IEbHCB7eM1UUTz6JiZpvR7aa3hWJ8eSPsR1R3lOWh1m9yRTVLJShfmZ53gutxOyK26Y9s7oERJB29RnjIbE=
+    - secure: OmrNBSUyK6N0uTD98scX67uH4k6biHPgzVrXmJs4NvAzLjIR47NCDnoTs/9E1xsKWV47UMO2W/Npy8DYhxHp7g4voel9kijQylYZjDoWguLualWyvKb+cjpuHWYYuW976YE4NwCVxvip5oOSyfFw60jKMaefttngWhqP5SezPJcjpmoBsK7qFDCwnw8LeajtNIgoFcQQ2ULnOOxUgxe47sLoZ4RZApJTBLlRxr0rCG6R+Nz3To5igXd9lP5oUZadKdZYr3/A1TaT3r+TrgsdV46k3KusGsPIxFELPofa2vCZGcwwbBWgqMu2VPW+7lI+xPSxpBMly/bwXB+4qCdBltQ+4hY61G5oZypEZenGzv9dDTnc2+INjTfXuIrlYm4Qpr6/wJUUucrhWDIpTvWN/LSJWWyNV+22Qs5Vb5b6z6vxPlHeImt2cNP6EwhdIqfHofBqFu46eLt9zOE+NdvKXhos77aWjBhgOLqq++sSLA0scM+RwSLzL25CExMlKGg+1NRN87SCIebwJmKKWNiNK6LZym3G4Bve74jP4Wj6KQlOnuLRvHilh3bm0FmTYSood5y7fS0BlvEU/IxWOMj2fOrozXJQqgWE/Xrdw6iWR3hUlAaQVp3XiooGu449i+xoNSIh0oQWxxRGTycdwByzOikZzjYjDnIzQag3T8piZiA=
