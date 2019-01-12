@@ -2,6 +2,7 @@
 **/.vscode
 **/.coverage
 **/.coverage_html
+**/bin/test.sh
 **/dist
 **/build
 **/pytoast.egg-info
