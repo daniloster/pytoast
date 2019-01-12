@@ -35,7 +35,7 @@ if [[ $TRAVIS_BRANCH == 'master' ]]; then
   RELEASE_VERSION="$(get_version)"
 
   echo "[ci]: v${RELEASE_VERSION}"
-  git commit -m "[skip ci] [version-update]: v${RELEASE_VERSION}"
+  git commit -m "[skip ci] [release]: v${RELEASE_VERSION}"
   git tag -a "v${RELEASE_VERSION}" -m "[skip ci] [release]: v${RELEASE_VERSION}"
 
   echo "[git] pushing commit and tags"
