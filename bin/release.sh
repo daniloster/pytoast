@@ -34,9 +34,6 @@ if [[ $TRAVIS_BRANCH == 'master' ]]; then
   git add setup.py
   RELEASE_VERSION="$(get_version)"
 
-  cat README.md | sed "s/Version\@$CURRENT_VERSION/Version\@$RELEASE_VERSION/" | sed "s/pytoast==$CURRENT_VERSION/pytoast==$RELEASE_VERSION/"  > './README.md'
-  git add README.md
-
   echo "[skip ci] [release]: v${RELEASE_VERSION}"
   git commit -m "[skip ci] [release]: v${RELEASE_VERSION}"
   git tag -a "v${RELEASE_VERSION}"
