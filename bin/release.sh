@@ -41,13 +41,16 @@ if [[ $TRAVIS_BRANCH == 'master' ]]; then
   git commit -m "[skip ci] [release]: v${RELEASE_VERSION}"
   git tag -a "v${RELEASE_VERSION}"
 
-  echo "[ci] cleaning dist/ build/ and bdist_wheel/"
-  rm -rf dist/ build/ bdist_wheel/
+  echo "[ci] cleaning dist/ build/ and pytoast.egg-info/"
+  rm -rf dist/ build/ pytoast.egg-info/
 
   echo "[ci] Building setup.py"
   pipenv run python setup.py sdist bdist_wheel
   echo "[ci] Uploading pytoast"
-  pipenv run twine upload dist/*
+  pipenv run twine upload dist/* --username=daniloster --password=$PYPI_AUTH_TOKEN
+
+  echo "[git] pushing commit and tags"
+  git push gh-publish master --tags
 fi
 
 
