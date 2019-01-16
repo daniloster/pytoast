@@ -2,6 +2,7 @@ import click
 import sys
 import os
 import glob
+import traceback
 from pytoast import output
 from pytoast.settings import config, features
 from pytoast.decorators import collect_steps
@@ -10,9 +11,27 @@ from pytoast.runner import Runner
 runner = Runner(config)
 
 
+def run_context(task, failure_task, skip_exit=False):
+    try:
+        task()
+        return True
+    except:
+        output.error(traceback.format_exc())
+        failure_task()
+        if not skip_exit:
+            sys.exit(1)
+        else:
+            return False
+
+
+def get_title(root_path, features_path, fail_fast, verbose):
+    return '== Setting up Pytoast ==\n\nRoot: {}\nFeatures: {}\
+            \nFail fast: {}\nVerbose: {}\
+            '.format(root_path, features_path, fail_fast, verbose)
+
+
 def spin(tags, features_path, root_path, fail_fast, verbose):
-    output.write('== Setting up Pytoast ==\n\nRoot: {}\nFeatures: {}\
-                 \nFail fast: {}\nVerbose: {}'.format(root_path, features_path, fail_fast, verbose))
+    output.write(get_title(root_path, features_path, fail_fast, verbose))
     if not os.path.isabs(features_path):
         features_path = os.path.realpath(features_path)
     # Appending features to the sys.path
@@ -45,26 +64,32 @@ def spin(tags, features_path, root_path, fail_fast, verbose):
     output.br()
     output.write('* running scenarios')
     output.br()
-    config.before_all()
+    run_context(config.before_all, config.after_all)
+
     has_failed = False
     for scenario in features.scenarios:
         if should_run_all or has_at_least_one_tag(scenario.tags):
             output.br()
-            config.before_each()
-            output.reset_indent()
-            output.br()
-            output.write('{}: {}'.format(output.c('Scenario', 'white'),
-                                         output.c(scenario.name, 'cyan')))
-            output.inc_indent()
-            stats = runner.run_scenario(scenario)
-            if not has_failed and not stats['status']:
-                has_failed = True
+            if run_context(config.before_each, config.after_each, skip_exit=True):
+                output.reset_indent()
+                output.br()
+                output.write('{}: {}'.format(output.c('Scenario', 'white'),
+                                             output.c(scenario.name, 'cyan')))
+                output.inc_indent()
+                stats = runner.run_scenario(scenario)
+                if not has_failed and not stats['status']:
+                    has_failed = True
 
-            if fail_fast and has_failed:
-                sys.exit(1)
+                output.br()
+                run_context(config.after_each,
+                            lambda: output.warn(
+                                'after_each failed, exit will be skipped'),
+                            skip_exit=True)
 
-            output.br()
-            config.after_each()
+                if fail_fast and has_failed:
+                    # If scenario failed and it is fast fail
+                    # we only want to leave the loop
+                    break
 
     output.br()
     config.after_all()
