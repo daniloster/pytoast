@@ -77,13 +77,15 @@ if __name__ == '__main__':
 
 To get more info, try executing: `python run_tests.py --help`
 This will provide you a list of arguments that can/should be set. The mandatory arguments are root and features.
-| Argument | Description |
-| ---------------- | ------------- |
-| `--root` | The root folder path to your project |
-| `--features` | The folder path to your ".feature" files |
-| `--tags` | It will filter the scenarios that will get executed |
-| `--fail-fast` | Define whether the process should abort when a scenario fail |
-| `--verbose` | Define whether display stacktrace for errors |
+
+| Argument       | Description                                                          |
+| -------------- | -------------------------------------------------------------------- |
+| `--root`       | The root folder path to your project                                 |
+| `--features`   | The folder path to your ".feature" files                             |
+| `--tags`       | It will filter the scenarios that will get executed                  |
+| `--fail-fast`  | Define whether the process should abort when a scenario fail         |
+| `--show-stats` | Define whether it displays time elapsed and status as separate block |
+| `--verbose`    | Define whether display stacktrace for errors                         |
 
 ### Feature files
 
@@ -142,7 +144,10 @@ To run you test you will need to invoke python against your tests entrypoint.
 To use this library will need to install the following modules
 
 - click==7.0
+- coverage==4.5.2
 - mock==2.0.0
 - psycopg2
 - setuptools
+- tabulate==0.8.3
 - termcolor==1.1.0
+- wheel==0.32.3

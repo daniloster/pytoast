@@ -40,53 +40,62 @@ class Runner(object):
         groups = regex.search(step_sentence).groupdict()
         return groups
 
-    def run_step(self, steps_stats, keyword, step_sentence):
+    def run_step(self, step_stats, keyword, step_sentence):
         step_text = '{} {}'.format(keyword, step_sentence)
-        steps_stats[step_sentence] = {
-            'status': True,
-            'start_time': time.time()
-        }
+        step_stats['keyword'] = keyword
+        step_stats['sentence'] = step_sentence
+        step_stats['step'] = '%s %s' % (keyword, step_sentence)
+        step_stats['status'] = True
+        step_stats['start_time'] = time.time()
+
         (expression, step_lambda) = self.get_step(step_sentence)
         args = self.get_args(expression, step_sentence)
         try:
             step_lambda(**args)
         except AssertionError as error:
-            steps_stats[step_sentence]['status'] = False
-            steps_stats[step_sentence]['error'] = 'Assertion Error'
-            steps_stats[step_sentence]['stack'] = traceback.format_exc()
+            step_stats['status'] = False
+            step_stats['error'] = 'Assertion Error'
+            step_stats['stack'] = traceback.format_exc()
         except:
-            steps_stats[step_sentence]['status'] = False
+            step_stats['status'] = False
             error = RuntimeError(sys.exc_info()[0])
-            steps_stats[step_sentence]['error'] = error
-            steps_stats[step_sentence]['stack'] = traceback.format_exc()
+            step_stats['error'] = error
+            step_stats['stack'] = traceback.format_exc()
         finally:
-            steps_stats[step_sentence]['end_time'] = time.time()
-            steps_stats[step_sentence]['elapsed'] = steps_stats[step_sentence]['end_time'] - \
-                steps_stats[step_sentence]['start_time']
-            write = output.success if steps_stats[step_sentence]['status'] else output.error
-            write('{} \t\t\t step stats (ellapsed: {}, success: {}) \
-                  '.format(step_text,
-                           steps_stats[step_sentence]['elapsed'],
-                           steps_stats[step_sentence]['status']))
-            if self.config.verbose and not steps_stats[step_sentence]['status']:
+            step_stats['end_time'] = time.time()
+            step_stats['elapsed'] = step_stats['end_time'] - \
+                step_stats['start_time']
+            write = output.success if step_stats['status'] else output.error
+            write(step_text)
+
+            if self.config.verbose and not step_stats['status']:
                 output.br()
-                output.error(steps_stats[step_sentence]['stack'])
+                output.error(step_stats['stack'])
                 output.br()
 
-            return steps_stats[step_sentence]
+            return step_stats
 
     def run_scenario(self, scenario):
+        scenario.stats['scenario'] = scenario.name
         scenario.stats['start_time'] = time.time()
+        scenario.stats['elapsed'] = None
         scenario.stats['status'] = True
-        scenario.stats['steps_stats'] = {}
+        scenario.stats['steps_stats'] = []
         try:
+            rank = 0
             for (keyword, step_sentence) in scenario.steps:
-                step_stats = self.run_step(scenario.stats['steps_stats'],
+                rank += 1
+                scenario.stats['steps_stats'].append({
+                    'rank': rank
+                })
+                step_stats = self.run_step(scenario.stats['steps_stats'][-1],
                                            keyword, step_sentence)
                 step_stats['keyword'] = keyword
-                status = scenario.stats['steps_stats'][step_sentence]['status']
+                status = scenario.stats['steps_stats'][-1]['status']
                 if not status:
                     scenario.stats['status'] = False
         finally:
             scenario.stats['end_time'] = time.time()
+            scenario.stats['elapsed'] = scenario.stats['end_time'] - \
+                scenario.stats['start_time']
             return scenario.stats

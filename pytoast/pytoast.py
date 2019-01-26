@@ -3,6 +3,7 @@ import sys
 import os
 import glob
 import traceback
+from tabulate import tabulate
 from pytoast import output
 from pytoast.settings import config, features
 from pytoast.decorators import collect_steps
@@ -24,14 +25,47 @@ def run_context(task, failure_task, skip_exit=False):
             return False
 
 
-def get_title(root_path, features_path, fail_fast, verbose):
+def get_title(root_path, features_path, fail_fast, show_stats, verbose):
     return '== Setting up Pytoast ==\n\nRoot: {}\nFeatures: {}\
-            \nFail fast: {}\nVerbose: {}\
-            '.format(root_path, features_path, fail_fast, verbose)
+            \nFail fast: {}\nShow stats: {}\nVerbose: {}\
+            '.format(root_path, features_path, fail_fast, show_stats, verbose)
 
 
-def spin(tags, features_path, root_path, fail_fast, verbose):
-    output.write(get_title(root_path, features_path, fail_fast, verbose))
+def get_step_stats_row(step_stats):
+    get_status_color = output.get_success if step_stats.get(
+        'status') else output.get_error
+    status = 'SUCCESS' if step_stats.get('status') else 'ERROR'
+
+    return [
+        '%s%s' % (output.get_indent(), output.get_warn(
+            step_stats.get('rank'))),
+        get_status_color(step_stats.get('keyword')),
+        get_status_color(status),
+        get_status_color(step_stats.get('elapsed'))
+    ]
+
+
+def print_stats(stats):
+    output.br()
+    scenario = output.get_success(stats.get('scenario')) if stats.get(
+        'status') else output.get_error(stats.get('scenario'))
+    output.write('Scenario: "%s" total_time: %s' % 
+                 (scenario, stats['elapsed']))
+    output.br()
+
+    table_rows = [get_step_stats_row(step_stats)
+                  for step_stats in stats.get('steps_stats')]
+    table = tabulate(table_rows, headers=[
+             '%s#' % output.get_indent(), 'Step', 'Status', 'Elapsed time'])
+
+    output.write_raw(table)
+
+    output.br()
+
+
+def spin(tags, features_path, root_path, fail_fast, show_stats, verbose):
+    output.write(get_title(root_path, features_path,
+                           fail_fast, show_stats, verbose))
     if not os.path.isabs(features_path):
         features_path = os.path.realpath(features_path)
     # Appending features to the sys.path
@@ -80,6 +114,10 @@ def spin(tags, features_path, root_path, fail_fast, verbose):
                 if not has_failed and not stats['status']:
                     has_failed = True
 
+                if show_stats:
+                    output.br()
+                    print_stats(stats)
+
                 output.br()
                 run_context(config.after_each,
                             lambda: output.warn(
@@ -101,6 +139,7 @@ def spin(tags, features_path, root_path, fail_fast, verbose):
 @click.option('--features', default='', help='Folder path to your "*.feature" files')
 @click.option('--root', default='', help='The root folder path to your project')
 @click.option('--fail-fast', is_flag=True, help='Define whether the process should abort when a scenario fail')
+@click.option('--show-stats', is_flag=True, help='Define whether it displays time elapsed and status as separate block')
 @click.option('--verbose', is_flag=True, help='Define whether display stacktrace for errors')
-def run(tags, features, root, fail_fast, verbose):
-    spin(tags, features, root, fail_fast, verbose)
+def run(tags, features, root, fail_fast, show_stats, verbose):
+    spin(tags, features, root, fail_fast, show_stats, verbose)
