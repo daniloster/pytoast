@@ -3,5 +3,6 @@ coverage==4.5.2
 mock==2.0.0
 psycopg2
 setuptools
+tabulate==0.8.3
 termcolor==1.1.0
 wheel==0.32.3
