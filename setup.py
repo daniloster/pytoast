@@ -10,7 +10,7 @@ with open(README_PATH, 'r') as file:
 
 setup(
     name='pytoast',
-    version='0.0.11',
+    version='0.0.12',
     description='A BDD test framework',
     long_description=README,
     long_description_content_type='text/markdown',
