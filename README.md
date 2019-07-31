@@ -14,20 +14,16 @@ There were a few issues to support `python@2.7.x`, then, it has been drop.
 
 You may get the latest version by setting this inside the requirements file
 
-```
-pytoast
-```
-
-Or specific version
+`e.g. version: v0.0.12`
 
 ```
-pytoast==version_number
+pytoast==git+https://github.com/daniloster/pytoast.git@v0.0.12#egg=pytoast
 ```
 
 ### By pip
 
 ```sh
-pip install pytoast
+pipenv install -e git+https://github.com/daniloster/pytoast.git@v0.0.12#egg=pytoast
 ```
 
 ## Usage
