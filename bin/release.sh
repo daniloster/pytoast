@@ -47,7 +47,7 @@ if [[ $TRAVIS_BRANCH == 'master' ]]; then
   echo "[ci] Building setup.py"
   pipenv run python setup.py sdist bdist_wheel
   echo "[ci] Uploading pytoast"
-  pipenv run twine upload dist/* --username=daniloster --password=$PYPI_AUTH_TOKEN
+  # pipenv run twine upload dist/* --username=daniloster --password=$PYPI_AUTH_TOKEN
 fi
 
 
